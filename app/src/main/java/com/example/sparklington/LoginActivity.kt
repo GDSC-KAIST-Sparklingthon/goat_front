@@ -108,7 +108,6 @@ class LoginActivity : ComponentActivity() {
                 Log.e(Constants.TAG, "카카오톡 프로필 가져오기 실패", error)
             } else if (profile != null) {
                 UserDataHolder.nickname = profile.nickname
-                UserDataHolder.profile_picture_URL = profile.profileImageUrl
                 Toast.makeText(this, "${profile.nickname}님 로그인 성공!", Toast.LENGTH_SHORT).show()
             }
         }

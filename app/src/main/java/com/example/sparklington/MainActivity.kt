@@ -2,6 +2,7 @@ package com.example.sparklington
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.sparklington.ServerCommunication.makeLoginRequest
+import com.example.sparklington.UserDataHolder.accessToken
 import com.example.sparklington.ui.theme.SparklingtonTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +27,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 }
 

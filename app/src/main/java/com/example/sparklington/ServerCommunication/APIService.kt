@@ -24,7 +24,6 @@ data class UpdateGrassNumRequest(val grass_num: Int): UpdateUserRequest()
 data class UpdateGardenArrayRequest(val garden_array: List<Pair<Int, Int>>): UpdateUserRequest()
 data class UpdateDonatedGoatNumRequest(val donated_goat_num: Int): UpdateUserRequest()
 
-
 interface ApiService {
 
     @GET("api/user/")

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 
 @Composable
@@ -41,21 +42,21 @@ fun TabContent4() {
         Spacer(modifier = Modifier.height(24.dp))
 
         // 회색 원 프로필 이미지 대체
-        Box(
+        Image(
+            painter = painterResource(id = R.drawable.profile),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
                 .background(Color.Gray)
-        ){
-            Image(painter = painterResource(id = R.drawable.avatar),
-                contentDescription = "")
-        }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // 사용자 이름
         Text(
-            text = "정지수 님",
+            text = UserDataHolder.nickname ?: "",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(top = 8.dp)
         )

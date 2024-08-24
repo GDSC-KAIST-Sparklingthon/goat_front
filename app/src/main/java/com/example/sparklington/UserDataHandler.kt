@@ -1,10 +1,15 @@
 package com.example.sparklington
 
+import android.util.Log
+import android.widget.Toast
+import com.example.sparklington.ServerCommunication.Constants
 import com.example.sparklington.ServerCommunication.UpdateDonatedGoatNumRequest
 import com.example.sparklington.ServerCommunication.UpdateGardenArrayRequest
 import com.example.sparklington.ServerCommunication.UpdateGoatAgeRequest
 import com.example.sparklington.ServerCommunication.UpdateGrassNumRequest
+import com.example.sparklington.ServerCommunication.makeLoginRequest
 import com.example.sparklington.ServerCommunication.updateUser
+import com.kakao.sdk.talk.TalkApiClient
 
 object  UserDataHolder {
     var accessToken: String? = "rnI4WnOusUrZ_MZ_jAV0pq5J663NFzTMAAAAAQoqJZEAAAGRg9tFw1XuKbObXTiX"
