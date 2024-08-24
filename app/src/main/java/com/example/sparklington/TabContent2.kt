@@ -14,22 +14,65 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+enum class GoatType(val color: Color) {
+    BASIC(Color.Gray),
+    CULTURE1(Color.Cyan),
+    CULTURE2(Color(0xFF90EE90))
+}
+
 @Composable
 fun GoatTabContent(onDonateClicked: () -> Unit) {
     var feedCount by remember { mutableStateOf(0) }
     var tempFeedCount by remember { mutableStateOf(0) }
     var showDialog by remember { mutableStateOf(false) }
+    var showBalloon by remember { mutableStateOf(false) }
+    var balloonType by remember { mutableStateOf("") }
+    var showQuizOptions by remember { mutableStateOf(false) }
+    var showAnswerBalloon by remember { mutableStateOf(false) }
+    var isButtonEnabled by remember { mutableStateOf(true) }
+    var goatType by remember { mutableStateOf(GoatType.BASIC) }
+
     val maxFeedCount = 100
     val feedPercentage = (feedCount.toFloat() / maxFeedCount) * 100
 
-    val scope = rememberCoroutineScope()
-
-    // 연타 후 일정 시간 동안 횟수를 유지한 뒤 초기화하는 효과
     LaunchedEffect(tempFeedCount) {
         if (tempFeedCount > 0) {
-            delay(2000)  // 2초 동안 횟수 유지
-            tempFeedCount = 0  // 초기화
+            delay(2000)
+
+            if ((0..9).random() == 0) {
+                balloonType = if ((0..1).random() == 0) "퀴즈" else "소식"
+                showBalloon = true
+                if (balloonType == "퀴즈") {
+                    showQuizOptions = true
+                }
+            }
+
+            tempFeedCount = 0
         }
+    }
+
+    LaunchedEffect(showBalloon) {
+        if (showBalloon) {
+            isButtonEnabled = false
+            delay(10000)
+            showBalloon = false
+            showQuizOptions = false
+            isButtonEnabled = true
+        }
+    }
+
+    LaunchedEffect(showAnswerBalloon) {
+        if (showAnswerBalloon) {
+            isButtonEnabled = false
+            delay(3000)
+            showAnswerBalloon = false
+            isButtonEnabled = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        feedCount = 0
+        goatType = GoatType.entries.random()
     }
 
     if (showDialog) {
@@ -68,7 +111,6 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 염소 이름과 상태 표시
         Text(
             text = "염소",
             fontSize = 24.sp,
@@ -78,12 +120,10 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 염소가 먹은 퍼센트 표시
         Text(text = "${feedPercentage.toInt()}%", fontSize = 20.sp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 염소가 먹은 양을 시각화 (블럭)
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
@@ -108,19 +148,64 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 염소 이미지 자리 (임시 네모)
+        // 염소 이미지 자리
         Box(
             modifier = Modifier
                 .size(150.dp)
-                .background(Color.Gray)
+                .background(goatType.color),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            if (showBalloon) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.White, RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = balloonType,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+            if (showAnswerBalloon) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.Yellow, RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = "정답입니다!",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 염소 종류 텍스트 표시
+        Text(
+            text = when (goatType) {
+                GoatType.BASIC -> "기본 염소"
+                GoatType.CULTURE1 -> "문화 염소 1"
+                GoatType.CULTURE2 -> "문화 염소 2"
+            },
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Black
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 먹이주기 버튼
         Button(
             onClick = {
-                if (feedCount < maxFeedCount) {
+                if (feedCount < maxFeedCount && isButtonEnabled) {
                     feedCount++
                     tempFeedCount++
                 }
@@ -129,14 +214,41 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
                     showDialog = true
                 }
             },
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            enabled = isButtonEnabled
         ) {
             Text(text = "먹이주기")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 먹이 준 횟수 표시 (연타 횟수)
         Text(text = "X $tempFeedCount", fontSize = 24.sp)
+
+        if (showQuizOptions) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Button(onClick = {
+                    showBalloon = false
+                    showQuizOptions = false
+                    showAnswerBalloon = true
+                }) {
+                    Text(text = "O")
+                }
+                Button(onClick = {
+                    showBalloon = false
+                    showQuizOptions = false
+                    showAnswerBalloon = true
+                }) {
+                    Text(text = "X")
+                }
+            }
+        }
     }
 }
+
+
+
+
+
