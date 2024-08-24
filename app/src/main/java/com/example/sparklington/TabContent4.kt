@@ -1,5 +1,6 @@
 package com.example.sparklington
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 
 @Composable
 fun TabContent4() {
@@ -44,7 +46,10 @@ fun TabContent4() {
                 .size(100.dp)
                 .clip(CircleShape)
                 .background(Color.Gray)
-        )
+        ){
+            Image(painter = painterResource(id = R.drawable.avatar),
+                contentDescription = "")
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
