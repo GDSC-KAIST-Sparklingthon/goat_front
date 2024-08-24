@@ -2,18 +2,25 @@ package com.example.sparklington
 
 import android.widget.NumberPicker
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +55,7 @@ fun TimerButtons(onStart: () -> Unit, onPause: () -> Unit, onSetTime: () -> Unit
             Text(text = "집중 시작")
         }
         Button(onClick = onSetTime) {
-            Text(text = "시간 설정")
+            Text(text = "목표 설정")
         }
         Button(onClick = onPause) {
             Text(text = "일시 정지")
@@ -62,23 +69,40 @@ fun TimeSettingDialog(
     onHoursChange: (Int) -> Unit,
     selectedMinutes: Int,
     onMinutesChange: (Int) -> Unit,
+    betGrass: Int,
+    onBetGrassChange: (Int) -> Unit,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "타이머 설정") },
+        title = { Text(text = "타이머 및 베팅 설정") },
         text = {
-            Row {
-                NumberPickerView(
-                    value = selectedHours,
-                    range = 0..23,
-                    onValueChange = onHoursChange
-                )
-                MinutePickerView(
-                    value = selectedMinutes,
-                    minuteValues = (0..11).map { it * 5 }.toTypedArray(),
-                    onValueChange = onMinutesChange
+            Column {
+                Row {
+                    NumberPickerView(
+                        value = selectedHours,
+                        range = 0..23,
+                        onValueChange = onHoursChange
+                    )
+                    Text("시간", modifier = Modifier.align(Alignment.CenterVertically))
+                    MinutePickerView(
+                        value = selectedMinutes,
+                        minuteValues = (0..11).map { it * 5 }.toTypedArray(),
+                        onValueChange = onMinutesChange
+                    )
+                    Text("분", modifier = Modifier.align(Alignment.CenterVertically))
+                }
+                Spacer(modifier = Modifier.height(16.dp)) // 간격 추가
+                TextField(
+                    value = betGrass.toString(),
+                    onValueChange = { value ->
+                        val intValue = value.toIntOrNull() ?: 0
+                        onBetGrassChange(intValue)
+                    },
+                    label = { Text("베팅 잔디 수") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         },
@@ -94,6 +118,7 @@ fun TimeSettingDialog(
         }
     )
 }
+
 
 @Composable
 fun NumberPickerView(value: Int, range: IntRange, onValueChange: (Int) -> Unit) {
