@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
+import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,12 +19,12 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var grassIncreaseAmount by rememberSaveable { mutableStateOf(0) }
     var isRunning by rememberSaveable { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
-    var showExitConfirmation by remember { mutableStateOf(false) } // 경고창 상태 변수
+    var showExitConfirmation by remember { mutableStateOf(false) }
     var selectedHours by remember { mutableStateOf(0) }
     var selectedMinutes by remember { mutableStateOf(0) }
     var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
-    var currentGrass by rememberSaveable { mutableStateOf(100) } // 초기 잔디 수
+    var currentGrass by rememberSaveable { mutableStateOf(100) }
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
@@ -38,14 +37,6 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         positions.add(Pair(1, 4))
         positions.add(Pair(7, 2))
         positions.add(Pair(4, 5))
-    }
-
-    DisposableEffect(isRunning) {
-        onDispose {
-            if (isRunning) {
-                currentGrass -= betGrass
-            }
-        }
     }
 
     LaunchedEffect(isRunning) {
@@ -126,6 +117,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                             grassToGet = ObtainingGrass(betGrass, betTimeUnit)
                             grassIncreaseAmount = grassToGet + betGrass
                             currentGrass -= betGrass
+                            currentGrass = max(currentGrass, 0)
                         }
                         showDialog = false
                     }
@@ -142,7 +134,6 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         TextButton(onClick = {
                             showExitConfirmation = false
                             isRunning = false
-                            currentGrass -= betGrass
                         }) {
                             Text("종료")
                         }
