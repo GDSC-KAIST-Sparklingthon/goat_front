@@ -49,9 +49,6 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     LaunchedEffect(currentHay) {
         UserDataHolder.hay_num = currentHay
     }
-    LaunchedEffect(positions) {
-        UserDataHolder.garden_array = positions.toList()
-    }
 
     LaunchedEffect(isRunning) {
         if (isRunning) {
@@ -74,6 +71,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         c = Random.nextInt(0, gridColumns)
                     } while (positions.contains(Pair(r, c)))
                     positions.add(Pair(r, c))
+                    UserDataHolder.garden_array = positions
                 }
 
                 showCongrats = true
