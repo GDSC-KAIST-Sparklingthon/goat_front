@@ -12,7 +12,6 @@ data class LoginResponse(
 )
 
 data class User(
-    val id: Int,
     val goat_age: Int,
     val grass_num: Int,
     val garden_array: List<Pair<Int, Int>>,

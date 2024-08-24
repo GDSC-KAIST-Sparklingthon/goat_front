@@ -18,12 +18,13 @@ fun makeLoginRequest(authToken: String) {
                 val loginResponse = response.body()
                 Log.d("LOGIN RESPONSE BODY", response.toString())
                 if (loginResponse != null) {
-                    UserDataHolder.goat_age = loginResponse.user.goat_age
-                    UserDataHolder.grass_num = loginResponse.user.grass_num
-                    UserDataHolder.garden_array = loginResponse.user.garden_array
-                    UserDataHolder.subscription_end_date = loginResponse.user.subscription_end_date
-                    UserDataHolder.donated_goat_num = loginResponse.user.donated_goat_num
-                    Log.d("LOGIN RESPONSE", "id: ${loginResponse.user.id} goat_age: ${UserDataHolder.goat_age}")
+                    UserDataHolder.initialize(
+                        loginResponse.user.goat_age,
+                        loginResponse.user.grass_num,
+                        loginResponse.user.garden_array,
+                        loginResponse.user.donated_goat_num
+                    )
+                    Log.d("LOGIN RESPONSE", "goat_age: ${UserDataHolder.goat_age}")
                 }
                 else {Log.d("LOGIN RESPONSE", "BODY IS EMPTY")}
             } else {
@@ -46,12 +47,6 @@ fun updateUser(authToken: String, updateUserRequest: UpdateUserRequest) {
         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
             if (response.isSuccessful) {
                 val updatedResponse = response.body()
-                if (updatedResponse != null) {
-                    UserDataHolder.goat_age = updatedResponse.user.goat_age
-                    UserDataHolder.grass_num = updatedResponse.user.grass_num
-                    UserDataHolder.garden_array = updatedResponse.user.garden_array
-                    UserDataHolder.donated_goat_num = updatedResponse.user.donated_goat_num
-                }
             } else {
                 Log.d("UPDATE RESPONSE","Request failed with code: ${response.code()}")
             }
