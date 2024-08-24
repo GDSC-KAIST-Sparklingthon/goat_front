@@ -65,13 +65,25 @@ fun MainContent() {
                 .padding(paddingValues)
         ) {
             when (selectedTabIndex) {
-                0 -> TabContent1()
-                1 -> GoatTabContent()
+                0 -> TabContent1(isRunningState = { isRunning = it }, modifier = Modifier.padding(paddingValues))
+                1 -> GoatTabContent(onDonateClicked = { selectedTabIndex = 2 })
                 2 -> TabContent3()
-                3 -> TabContent4()
+                3 -> TabContent4()  // ToDo: TabContent4로 이름 바꾸거나 MyPageTabContent.kt 생성할 것
             }
         }
 
+        if (showWarningDialog) {
+            AlertDialog(
+                onDismissRequest = { showWarningDialog = false },
+                title = { Text(text = "경고") },
+                text = { Text(text = "타이머가 실행 중일 때는 다른 탭으로 이동할 수 없습니다.") },
+                confirmButton = {
+                    TextButton(onClick = { showWarningDialog = false }) {
+                        Text("확인")
+                    }
+                }
+            )
+        }
     }
 }
 
