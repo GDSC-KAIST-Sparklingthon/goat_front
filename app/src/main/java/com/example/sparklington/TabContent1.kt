@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,8 +21,9 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var showDialog by remember { mutableStateOf(false) }
     var selectedHours by remember { mutableStateOf(0) }
     var selectedMinutes by remember { mutableStateOf(0) }
-    var betGrass by rememberSaveable { mutableStateOf(0) } // Saveable로 유지
+    var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
+    var currentGrass by rememberSaveable { mutableStateOf(100) } // 초기 잔디 수
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
@@ -38,6 +38,16 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         positions.add(Pair(4, 5))
     }
 
+    // 앱을 나갈 때의 처리
+    DisposableEffect(isRunning) {
+        onDispose {
+            if (isRunning) {
+                // 앱을 나가면 배팅한 잔디를 잃음
+                currentGrass -= betGrass
+            }
+        }
+    }
+
     LaunchedEffect(isRunning) {
         if (isRunning) {
             isRunningState(true)
@@ -46,11 +56,12 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         }
 
         while (isRunning) {
-            kotlinx.coroutines.delay(1000L)
+            delay(1000L)
             if (remainingTicks > 0) {
                 remainingTicks--
             } else {
                 isRunning = false
+                currentGrass += betGrass + grassToGet // 성공적으로 기다린 경우 잔디 추가
                 for (i in (1..grassIncreaseAmount)) {
                     var r: Int
                     var c: Int
@@ -81,9 +92,13 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Timer(remainingTicks)
+            Text("현재 잔디: $currentGrass 개") // 현재 잔디 수 표시
             Text("획득 예정: ${betGrass + grassToGet}개") // betGrass를 표시
             TimerButtons(
-                onStart = { isRunning = true },
+                onStart = {
+                    isRunning = true
+                    currentGrass -= betGrass
+                },
                 onPause = { isRunning = false },
                 onSetTime = { showDialog = true }
             )
@@ -95,14 +110,22 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     selectedMinutes = selectedMinutes,
                     onMinutesChange = { selectedMinutes = it },
                     betGrass = betGrass,
-                    onBetGrassChange = { betGrass = it },
+                    onBetGrassChange = {
+                        if (it <= currentGrass) {
+                            betGrass = it
+                        } else {
+                            betGrass = currentGrass
+                        }
+                    },
                     onDismiss = { showDialog = false },
                     onConfirm = {
-                        remainingTicks = selectedHours * 3600 + selectedMinutes * 60
-                        grassIncreaseAmount = (selectedHours * 60 + selectedMinutes) / 30
-                        val betTimeUnit = selectedMinutes / 30 + selectedHours * 2
-                        grassToGet = ObtainingGrass(betGrass, betTimeUnit) // betGrass 업데이트
-                        isRunning = false
+                        if (betGrass <= currentGrass) {
+                            remainingTicks = selectedHours * 3600 + selectedMinutes * 60
+                            val betTimeUnit = selectedMinutes / 30 + selectedHours * 2
+                            grassToGet = ObtainingGrass(betGrass, betTimeUnit)
+                            grassIncreaseAmount = grassToGet + betGrass
+                            isRunning = true
+                        }
                         showDialog = false
                     }
                 )
