@@ -8,6 +8,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlin.math.max
@@ -20,17 +23,25 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var isRunning by rememberSaveable { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var showExitConfirmation by remember { mutableStateOf(false) }
+    var showCongrats by remember { mutableStateOf(false) } // 축하 메시지 상태 변수
     var selectedHours by remember { mutableStateOf(0) }
     var selectedMinutes by remember { mutableStateOf(0) }
     var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
-    var currentGrass by rememberSaveable { mutableStateOf(10) }
+
+    var currentGrass by rememberSaveable { mutableStateOf(100) }
+    var currentHay by rememberSaveable { mutableStateOf(0) }
+
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
     val positions = remember { mutableStateListOf<Pair<Int, Int>>() }
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Url("https://lottie.host/f01dc1d7-8155-4554-a269-7fa00788c0ba/gpoRgALuCo.json")
+    )
 
     LaunchedEffect(Unit) {
         positions.clear()
@@ -52,7 +63,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 remainingTicks--
             } else {
                 isRunning = false
-                currentGrass += betGrass + grassToGet // 성공적으로 기다린 경우 잔디 추가
+                currentGrass += betGrass + grassToGet
                 for (i in (1..grassIncreaseAmount)) {
                     var r: Int
                     var c: Int
@@ -62,6 +73,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     } while (positions.contains(Pair(r, c)))
                     positions.add(Pair(r, c))
                 }
+                showCongrats = true // 타이머가 끝났을 때 축하 메시지 표시
             }
         }
     }
@@ -73,7 +85,16 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
-            FarmBottomSheet(scaffoldState, scope, gridRows, gridColumns, positions)
+            FarmBottomSheet(
+                scaffoldState,
+                scope,
+                gridRows,
+                gridColumns,
+                positions,
+                onGrassCollected = { position ->
+                    positions.remove(position)
+                    currentHay += 1
+                })
         },
         sheetPeekHeight = 56.dp,
         modifier = modifier.fillMaxSize()
@@ -88,6 +109,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         ) {
             Timer(remainingTicks)
             Text("현재 잔디: $currentGrass 개")
+            Text("현재 건초: $currentHay 개")
             Text("획득 예정: ${betGrass + grassToGet}개")
             TimerButtons(
                 onStart = { isRunning = true },
@@ -124,7 +146,24 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 )
             }
 
-            // 경고창 표시
+            if (showCongrats) {
+                AlertDialog(
+                    onDismissRequest = { showCongrats = false },
+                    title = { Text("목표 달성 완료") },
+                    text = { Text("축하합니다! ${betGrass + grassToGet}포기의 잔디를 획득했어요.") },
+                    confirmButton = {
+                        TextButton(onClick = { showCongrats = false }) {
+                            Text("염소 먹이러 가기")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showCongrats = false }) {
+                            Text("닫기")
+                        }
+                    }
+                )
+            }
+
             if (showExitConfirmation) {
                 AlertDialog(
                     onDismissRequest = { showExitConfirmation = false },
@@ -144,6 +183,20 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         }
                     }
                 )
+            }
+
+            Spacer(modifier = Modifier.height(100.dp)) // TimerButtons와 LottieAnimation 사이에 30dp 간격 추가
+
+            if (composition != null) {
+                // GIF 이미지 (Lottie 애니메이션)
+                LottieAnimation(
+                    composition = composition,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp) // 원하는 높이로 조절
+                )
+            } else {
+                Text("Loading animation...", modifier = Modifier.align(Alignment.CenterHorizontally))
             }
         }
     }

@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.airbnb.android:lottie-compose:6.1.0")
     implementation("com.kakao.sdk:v2-all:2.20.3") // 전체 모듈 설치, 2.11.0 버전부터 지원
     implementation("com.kakao.sdk:v2-user:2.20.3") // 카카오 로그인 API 모듈
     implementation("com.kakao.sdk:v2-share:2.20.3") // 카카오톡 공유 API 모듈
