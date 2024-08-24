@@ -40,11 +40,9 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         positions.add(Pair(4, 5))
     }
 
-    // 앱을 나갈 때의 처리
     DisposableEffect(isRunning) {
         onDispose {
             if (isRunning) {
-                // 앱을 나가면 배팅한 잔디를 잃음
                 currentGrass -= betGrass
             }
         }
@@ -77,9 +75,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         }
     }
 
-    // BackHandler를 사용하여 뒤로가기 버튼 처리
     BackHandler(isRunning) {
-        showExitConfirmation = true // 경고창 표시
+        showExitConfirmation = true
     }
 
     BottomSheetScaffold(
@@ -99,8 +96,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Timer(remainingTicks)
-            Text("현재 잔디: $currentGrass 개") // 현재 잔디 수 표시
-            Text("획득 예정: ${betGrass + grassToGet}개") // betGrass를 표시
+            Text("현재 잔디: $currentGrass 개")
+            Text("획득 예정: ${betGrass + grassToGet}개")
             TimerButtons(
                 onStart = { isRunning = true },
                 onPause = { isRunning = false },
@@ -118,7 +115,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         if (it <= currentGrass) {
                             betGrass = it
                         } else {
-                            betGrass = currentGrass // 배팅 가능한 최대 잔디로 설정
+                            betGrass = currentGrass
                         }
                     },
                     onDismiss = { showDialog = false },
@@ -128,8 +125,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                             val betTimeUnit = selectedMinutes / 30 + selectedHours * 2
                             grassToGet = ObtainingGrass(betGrass, betTimeUnit)
                             grassIncreaseAmount = grassToGet + betGrass
-                            currentGrass -= betGrass // 배팅 시 현재 잔디에서 차감
-                            isRunning = true
+                            currentGrass -= betGrass
                         }
                         showDialog = false
                     }
@@ -145,8 +141,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     confirmButton = {
                         TextButton(onClick = {
                             showExitConfirmation = false
-                            isRunning = false // 타이머 종료
-                            currentGrass -= betGrass // 잔디 잃음
+                            isRunning = false
+                            currentGrass -= betGrass
                         }) {
                             Text("종료")
                         }
