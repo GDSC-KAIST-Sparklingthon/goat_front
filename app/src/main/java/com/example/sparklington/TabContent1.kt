@@ -63,7 +63,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         while (isRunning) {
             delay(1000L)
             if (remainingTicks > 0) {
-                remainingTicks--
+                remainingTicks-=100
             } else {
                 isRunning = false
                 for (i in (1..grassIncreaseAmount)) {
@@ -96,6 +96,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 positions,
                 onGrassCollected = { position ->
                     positions.remove(position)
+                    UserDataHolder.garden_array = positions
                     currentHay += 1
                 })
         },

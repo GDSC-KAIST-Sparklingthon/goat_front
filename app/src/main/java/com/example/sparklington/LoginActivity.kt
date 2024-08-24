@@ -50,6 +50,7 @@ class LoginActivity : ComponentActivity() {
         if (AuthApiClient.instance.hasToken()) {
             val token = AuthApiClient.instance.tokenManagerProvider.manager.getToken()
             UserDataHolder.accessToken = token?.accessToken
+            Log.d("KAKAO TOKEN", token.toString())
             UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                 if (error == null) {
                     nextMainActivity()
