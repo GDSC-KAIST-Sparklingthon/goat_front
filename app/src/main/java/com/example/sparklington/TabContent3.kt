@@ -25,6 +25,7 @@ data class DonationSite(
     val engName: String,
     val url: String,
     val imageResId: Int,
+    val imageResSam: Int,
     val description: String,
     val category: String
 )
@@ -144,9 +145,9 @@ fun AlertCard(site: DonationSite) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
-        if (site.imageResId != 0) {
+        if (site.imageResSam != 0) {
             Image(
-                painter = painterResource(id = site.imageResId),
+                painter = painterResource(id = site.imageResSam),
                 contentDescription = site.engName,
                 modifier = Modifier
                     .fillMaxWidth()
