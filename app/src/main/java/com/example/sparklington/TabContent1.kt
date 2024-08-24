@@ -46,6 +46,12 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         positions.clear()
         positions.addAll(UserDataHolder.garden_array)
     }
+    LaunchedEffect(currentHay) {
+        UserDataHolder.hay_num = currentHay
+    }
+    LaunchedEffect(positions) {
+        UserDataHolder.garden_array = positions.toList()
+    }
 
     LaunchedEffect(isRunning) {
         if (isRunning) {
@@ -69,7 +75,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     } while (positions.contains(Pair(r, c)))
                     positions.add(Pair(r, c))
                 }
-                showCongrats = true // 타이머가 끝났을 때 축하 메시지 표시
+
+                showCongrats = true
             }
         }
     }
@@ -190,7 +197,10 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         .height(200.dp) // 원하는 높이로 조절
                 )
             } else {
-                Text("Loading animation...", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text(
+                    "Loading animation...",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     }
