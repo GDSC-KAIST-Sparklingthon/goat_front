@@ -65,7 +65,7 @@ fun MainContent() {
                 .padding(paddingValues)
         ) {
             when (selectedTabIndex) {
-                0 -> TabContent1(isRunningState = { isRunning = it }, modifier = Modifier.padding(paddingValues))
+                0 -> TabContent1()
                 1 -> GoatTabContent(onDonateClicked = { selectedTabIndex = 2 })
                 2 -> TabContent3()
                 3 -> TabContent4()  // ToDo: TabContent4로 이름 바꾸거나 MyPageTabContent.kt 생성할 것
