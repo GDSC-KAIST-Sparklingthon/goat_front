@@ -22,6 +22,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var showDialog by remember { mutableStateOf(false) }
     var selectedHours by remember { mutableStateOf(0) }
     var selectedMinutes by remember { mutableStateOf(0) }
+    var betGrass by rememberSaveable { mutableStateOf(0) } // Saveable로 유지
+    var grassToGet by rememberSaveable { mutableStateOf(0) }
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
@@ -79,7 +81,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Timer(remainingTicks)
-
+            Text("획득 예정: ${betGrass + grassToGet}개") // betGrass를 표시
             TimerButtons(
                 onStart = { isRunning = true },
                 onPause = { isRunning = false },
@@ -92,10 +94,14 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     onHoursChange = { selectedHours = it },
                     selectedMinutes = selectedMinutes,
                     onMinutesChange = { selectedMinutes = it },
+                    betGrass = betGrass,
+                    onBetGrassChange = { betGrass = it },
                     onDismiss = { showDialog = false },
                     onConfirm = {
                         remainingTicks = selectedHours * 3600 + selectedMinutes * 60
                         grassIncreaseAmount = (selectedHours * 60 + selectedMinutes) / 30
+                        val betTimeUnit = selectedMinutes / 30 + selectedHours * 2
+                        grassToGet = ObtainingGrass(betGrass, betTimeUnit) // betGrass 업데이트
                         isRunning = false
                         showDialog = false
                     }
@@ -103,4 +109,8 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             }
         }
     }
+}
+
+fun ObtainingGrass(betGrass: Int, betTimeUnit: Int): Int {
+    return (betGrass.toFloat() * (betTimeUnit * 0.1)).toInt()
 }
