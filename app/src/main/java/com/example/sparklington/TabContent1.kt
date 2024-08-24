@@ -3,13 +3,13 @@ package com.example.sparklington
 import android.service.autofill.UserData
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -52,9 +52,6 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     LaunchedEffect(currentHay) {
         UserDataHolder.hay_num = currentHay
     }
-    LaunchedEffect(positions) {
-        UserDataHolder.garden_array = positions.toList()
-    }
 
     LaunchedEffect(isRunning) {
         if (isRunning) {
@@ -66,7 +63,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         while (isRunning) {
             delay(1000L)
             if (remainingTicks > 0) {
-                remainingTicks--
+                remainingTicks-=100
             } else {
                 isRunning = false
                 for (i in (1..grassIncreaseAmount)) {
@@ -77,6 +74,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         c = Random.nextInt(0, gridColumns)
                     } while (positions.contains(Pair(r, c)))
                     positions.add(Pair(r, c))
+                    UserDataHolder.garden_array = positions
                 }
 
                 showCongrats = true
@@ -103,6 +101,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     positions,
                     onGrassCollected = { position ->
                         positions.remove(position)
+                        UserDataHolder.garden_array = positions
                         currentHay += 1
                     })
             }
