@@ -70,7 +70,7 @@ fun MainContent() {
                     modifier = Modifier.padding(paddingValues)
                 )
 
-                1 -> GoatTabContent()
+                1 -> GoatTabContent(onDonateClicked = { selectedTabIndex = 2 })
                 2 -> TabContent3()
                 3 -> TabContent4()
             }
