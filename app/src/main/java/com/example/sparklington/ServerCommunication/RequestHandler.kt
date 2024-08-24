@@ -20,7 +20,7 @@ fun makeLoginRequest(authToken: String) {
                 if (loginResponse != null) {
                     UserDataHolder.initialize(
                         loginResponse.user.goat_age,
-                        loginResponse.user.grass_num,
+                        loginResponse.user.hay_num,
                         loginResponse.user.garden_array,
                         loginResponse.user.donated_goat_num
                     )

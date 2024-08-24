@@ -13,7 +13,7 @@ data class LoginResponse(
 
 data class User(
     val goat_age: Int,
-    val grass_num: Int,
+    val hay_num: Int,
     val garden_array: List<Pair<Int, Int>>,
     val subscription_end_date: String?,
     val donated_goat_num: Int

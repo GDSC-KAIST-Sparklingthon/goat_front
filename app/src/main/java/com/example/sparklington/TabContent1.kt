@@ -1,5 +1,6 @@
 package com.example.sparklington
 
+import android.service.autofill.UserData
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -28,9 +29,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var selectedMinutes by remember { mutableStateOf(0) }
     var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
-    var currentGrass by rememberSaveable { mutableStateOf(100) }
     var currentHay by rememberSaveable { mutableStateOf(0) }
-
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
@@ -43,10 +42,9 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     )
 
     LaunchedEffect(Unit) {
+        currentHay = UserDataHolder.hay_num
         positions.clear()
-        positions.add(Pair(1, 4))
-        positions.add(Pair(7, 2))
-        positions.add(Pair(4, 5))
+        positions.addAll(UserDataHolder.garden_array)
     }
 
     LaunchedEffect(isRunning) {
@@ -62,7 +60,6 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 remainingTicks--
             } else {
                 isRunning = false
-                currentGrass += betGrass + grassToGet
                 for (i in (1..grassIncreaseAmount)) {
                     var r: Int
                     var c: Int
@@ -107,7 +104,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Timer(remainingTicks)
-            Text("현재 잔디: $currentGrass 개")
+            Text("현재 잔디: ${positions.count()} 개")
             Text("현재 건초: $currentHay 개")
             Text("획득 예정: ${betGrass + grassToGet}개")
             TimerButtons(
@@ -124,21 +121,19 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                     onMinutesChange = { selectedMinutes = it },
                     betGrass = betGrass,
                     onBetGrassChange = {
-                        if (it <= currentGrass) {
+                        if (it <= positions.count()) {
                             betGrass = it
                         } else {
-                            betGrass = currentGrass
+                            betGrass = positions.count()
                         }
                     },
                     onDismiss = { showDialog = false },
                     onConfirm = {
-                        if (betGrass <= currentGrass) {
+                        if (betGrass <= positions.count()) {
                             remainingTicks = selectedHours * 3600 + selectedMinutes * 60
                             val betTimeUnit = selectedMinutes / 30 + selectedHours * 2
                             grassToGet = ObtainingGrass(betGrass, betTimeUnit)
                             grassIncreaseAmount = grassToGet + betGrass
-                            currentGrass -= betGrass
-                            currentGrass = max(currentGrass, 0)
                         }
                         showDialog = false
                     }

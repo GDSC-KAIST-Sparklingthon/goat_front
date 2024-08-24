@@ -22,7 +22,7 @@ object  UserDataHolder {
             }
             field = value
         }
-    var grass_num: Int = 0 //DB
+    var hay_num: Int = 0 //DB
         set(value){
             if (accessToken!=null){
                 updateUser(accessToken!!, UpdateGrassNumRequest(value))
@@ -44,9 +44,9 @@ object  UserDataHolder {
             }
             field = value
         }
-    fun initialize(goat_age:Int, grass_num:Int, garden_array:List<Pair<Int, Int>>, donated_goat_num:Int){
+    fun initialize(goat_age:Int, hay_num:Int, garden_array:List<Pair<Int, Int>>, donated_goat_num:Int){
         this.goat_age = goat_age
-        this.grass_num = grass_num
+        this.hay_num = hay_num
         this.garden_array = garden_array
         this.donated_goat_num = donated_goat_num
     }
