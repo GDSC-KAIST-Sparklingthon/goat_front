@@ -20,7 +20,7 @@ data class User(
 )
 abstract class UpdateUserRequest()
 data class UpdateGoatAgeRequest(val goat_age: Int): UpdateUserRequest()
-data class UpdateGrassNumRequest(val grass_num: Int): UpdateUserRequest()
+data class UpdateHayNumRequest(val hay_num: Int): UpdateUserRequest()
 data class UpdateGardenArrayRequest(val garden_array: List<Pair<Int, Int>>): UpdateUserRequest()
 data class UpdateDonatedGoatNumRequest(val donated_goat_num: Int): UpdateUserRequest()
 

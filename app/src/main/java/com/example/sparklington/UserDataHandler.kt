@@ -6,7 +6,7 @@ import com.example.sparklington.ServerCommunication.Constants
 import com.example.sparklington.ServerCommunication.UpdateDonatedGoatNumRequest
 import com.example.sparklington.ServerCommunication.UpdateGardenArrayRequest
 import com.example.sparklington.ServerCommunication.UpdateGoatAgeRequest
-import com.example.sparklington.ServerCommunication.UpdateGrassNumRequest
+import com.example.sparklington.ServerCommunication.UpdateHayNumRequest
 import com.example.sparklington.ServerCommunication.makeLoginRequest
 import com.example.sparklington.ServerCommunication.updateUser
 import com.kakao.sdk.talk.TalkApiClient
@@ -25,7 +25,7 @@ object  UserDataHolder {
     var hay_num: Int = 0 //DB
         set(value){
             if (accessToken!=null){
-                updateUser(accessToken!!, UpdateGrassNumRequest(value))
+                updateUser(accessToken!!, UpdateHayNumRequest(value))
             }
             field = value
         }
