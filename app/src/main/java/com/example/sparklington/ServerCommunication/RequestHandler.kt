@@ -36,3 +36,30 @@ fun makeLoginRequest(authToken: String) {
         }
     })
 }
+
+fun updateUser(authToken: String, updateUserRequest: UpdateUserRequest) {
+    val apiService = RetrofitClient.instance.create(ApiService::class.java)
+    // Make the PUT request
+    val call = apiService.updateUser("Bearer $authToken", updateUserRequest)
+
+    call.enqueue(object : Callback<LoginResponse> {
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            if (response.isSuccessful) {
+                val updatedResponse = response.body()
+                if (updatedResponse != null) {
+                    UserDataHolder.goat_age = updatedResponse.user.goat_age
+                    UserDataHolder.grass_num = updatedResponse.user.grass_num
+                    UserDataHolder.garden_array = updatedResponse.user.garden_array
+                    UserDataHolder.donated_goat_num = updatedResponse.user.donated_goat_num
+                }
+            } else {
+                Log.d("UPDATE RESPONSE","Request failed with code: ${response.code()}")
+            }
+        }
+
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            t.printStackTrace()
+            Log.d("UPDATE RESPONSE","Request failed with code: ${t}")
+        }
+    })
+}
