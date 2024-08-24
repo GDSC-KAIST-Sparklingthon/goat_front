@@ -1,5 +1,9 @@
 package com.example.sparklington
 
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,10 +11,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -20,6 +32,8 @@ enum class GoatType(val color: Color) {
     CULTURE2(Color(0xFF90EE90))
 }
 
+
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun GoatTabContent(onDonateClicked: () -> Unit) {
     var feedCount by remember { mutableStateOf(0) }
@@ -155,6 +169,15 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
                 .background(goatType.color),
             contentAlignment = Alignment.TopCenter
         ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(R.drawable.goat) // res/drawable에 있는 GIF 파일의 리소스 ID를 사용
+                    .decoderFactory(ImageDecoderDecoder.Factory()) // ImageDecoderDecoder를 사용하여 GIF 디코딩
+                    .build(),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+
             if (showBalloon) {
                 Box(
                     modifier = Modifier
@@ -247,8 +270,3 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         }
     }
 }
-
-
-
-
-
