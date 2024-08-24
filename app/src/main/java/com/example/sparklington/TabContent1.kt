@@ -2,12 +2,15 @@ package com.example.sparklington
 
 import android.service.autofill.UserData
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -88,16 +91,21 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
-            FarmBottomSheet(
-                scaffoldState,
-                scope,
-                gridRows,
-                gridColumns,
-                positions,
-                onGrassCollected = { position ->
-                    positions.remove(position)
-                    currentHay += 1
-                })
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFF88977B))
+            ) {
+                FarmBottomSheet(
+                    scaffoldState,
+                    scope,
+                    gridRows,
+                    gridColumns,
+                    positions,
+                    onGrassCollected = { position ->
+                        positions.remove(position)
+                        currentHay += 1
+                    })
+            }
         },
         sheetPeekHeight = 56.dp,
         modifier = modifier.fillMaxSize()
