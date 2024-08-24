@@ -39,7 +39,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         if (tempFeedCount > 0) {
             delay(2000)
 
-            if ((0..9).random() == 0) {
+            if ((0..4).random() == 0) {
                 balloonType = if ((0..1).random() == 0) "퀴즈" else "소식"
                 showBalloon = true
                 if (balloonType == "퀴즈") {
