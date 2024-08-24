@@ -68,20 +68,37 @@ class LoginActivity : ComponentActivity() {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                 if (error != null) {
-                    Log.e(Constants.TAG, "로그인 실패 $error")
+                    Log.e(Constants.TAG, "talk 로그인 실패 $error")
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        Log.e(Constants.TAG, "talk client 로그인 실패 $error")
                         return@loginWithKakaoTalk
                     } else {
+                        Log.e(Constants.TAG, "talk 로그인 실패, client 아님 $error")
                         UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
                     }
                 } else if (token != null) {
                     UserDataHolder.accessToken = token.accessToken
-                    Log.d(Constants.TAG, "로그인 성공 ${token}")
+                    Log.d(Constants.TAG, "talk 로그인 성공 ${token}")
                     nextMainActivity()
                 }
             }
         } else {
-            UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
+            UserApiClient.instance.loginWithKakaoAccount(this){ token, error ->
+                if (error != null) {
+                    Log.e(Constants.TAG, "account 로그인 실패 $error")
+                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        Log.e(Constants.TAG, "account client 로그인 실패 $error")
+                        return@loginWithKakaoAccount
+                    } else {
+                        Log.e(Constants.TAG, "account 로그인 실패, client 아님 $error")
+                        UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
+                    }
+                } else if (token != null) {
+                    UserDataHolder.accessToken = token.accessToken
+                    Log.d(Constants.TAG, "account 로그인 성공 ${token}")
+                    nextMainActivity()
+                }
+            }
         }
     }
     private fun fetchKakaoTalkProfile() {
