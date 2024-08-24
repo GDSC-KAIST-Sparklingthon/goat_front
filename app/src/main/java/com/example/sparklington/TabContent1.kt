@@ -153,7 +153,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 )
             }
 
-            Spacer(modifier = Modifier.height(70.dp)) // TimerButtons와 LottieAnimation 사이에 30dp 간격 추가
+            Spacer(modifier = Modifier.height(100.dp)) // TimerButtons와 LottieAnimation 사이에 30dp 간격 추가
 
             if (composition != null) {
                 // GIF 이미지 (Lottie 애니메이션)
