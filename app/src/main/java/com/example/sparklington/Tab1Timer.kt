@@ -25,7 +25,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import com.example.sparklington.R
 
+
+val customFontFamily = FontFamily(
+    Font(R.font.rushfordclean)
+)
 
 @Composable
 fun Timer(remainingTicks: Int) {
@@ -36,6 +43,7 @@ fun Timer(remainingTicks: Int) {
     Text(
         text = "$hours : $minutes : $seconds",
         fontSize = 48.sp,
+        fontFamily = customFontFamily,  // 숫자 텍스트에만 커스텀 폰트를 적용
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 32.dp),

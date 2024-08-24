@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 enum class GoatType(val color: Color) {
     BASIC(Color.Gray),
@@ -31,8 +30,9 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
     var showAnswerBalloon by remember { mutableStateOf(false) }
     var isButtonEnabled by remember { mutableStateOf(true) }
     var goatType by remember { mutableStateOf(GoatType.BASIC) }
+    var grassNum by remember { mutableStateOf(UserDataHolder.grass_num) } // 보유 여물 개수
 
-    val maxFeedCount = 100
+    val maxFeedCount = grassNum
     val feedPercentage = (feedCount.toFloat() / maxFeedCount) * 100
 
     LaunchedEffect(tempFeedCount) {
@@ -73,6 +73,13 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
     LaunchedEffect(Unit) {
         feedCount = 0
         goatType = GoatType.entries.random()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            // 남은 보유 여물 개수를 UserDataHandler에 저장
+            UserDataHolder.grass_num = grassNum
+        }
     }
 
     if (showDialog) {
@@ -208,6 +215,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
                 if (feedCount < maxFeedCount && isButtonEnabled) {
                     feedCount++
                     tempFeedCount++
+                    grassNum-- // 먹이주기를 하면 보유 여물 개수를 줄임
                 }
 
                 if (feedCount == maxFeedCount) {
@@ -215,19 +223,25 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
                 }
             },
             modifier = Modifier.padding(8.dp),
-            enabled = isButtonEnabled
+            enabled = isButtonEnabled && grassNum > 0 // 보유 여물 개수가 있을 때만 버튼 활성화
         ) {
             Text(text = "먹이주기")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "X $tempFeedCount", fontSize = 24.sp)
+        Text(text = "보유 여물 개수: $grassNum", fontSize = 20.sp)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "X $tempFeedCount", fontSize = 20.sp)
 
         if (showQuizOptions) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Button(onClick = {
                     showBalloon = false
@@ -247,6 +261,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         }
     }
 }
+
 
 
 

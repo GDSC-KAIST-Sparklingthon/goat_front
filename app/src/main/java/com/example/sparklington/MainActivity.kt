@@ -12,11 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.sparklington.ServerCommunication.makeLoginRequest
 import com.example.sparklington.ui.theme.SparklingtonTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (UserDataHolder.accessToken != null){
+            makeLoginRequest(UserDataHolder.accessToken!!)
+        }
         setContent {
             MaterialTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {

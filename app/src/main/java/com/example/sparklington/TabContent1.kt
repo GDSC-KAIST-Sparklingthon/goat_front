@@ -24,7 +24,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var selectedMinutes by remember { mutableStateOf(0) }
     var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
-    var currentGrass by rememberSaveable { mutableStateOf(100) }
+    var currentGrass by rememberSaveable { mutableStateOf(10) }
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
