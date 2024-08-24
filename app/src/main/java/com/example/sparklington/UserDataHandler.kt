@@ -7,7 +7,7 @@ import com.example.sparklington.ServerCommunication.UpdateGrassNumRequest
 import com.example.sparklington.ServerCommunication.updateUser
 
 object  UserDataHolder {
-    var accessToken: String? = null
+    var accessToken: String? = "rnI4WnOusUrZ_MZ_jAV0pq5J663NFzTMAAAAAQoqJZEAAAGRg9tFw1XuKbObXTiX"
     var nickname:String? = null
     var profile_picture_URL:String? = null
     var goat_age: Int = 0 //DB
