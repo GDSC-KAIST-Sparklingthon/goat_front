@@ -40,7 +40,7 @@ fun TabContent3() {
     // 상태 변수를 사용해 현재 선택된 카테고리를 추적
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
-    Column(
+    Column(//
         modifier = Modifier
             .fillMaxSize()
     ) {

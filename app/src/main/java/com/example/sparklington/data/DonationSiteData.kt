@@ -10,7 +10,7 @@ data class DonationSiteData(
     val imageResId: Int,
     val description: String,
     val category: String
-)
+)//
 
 // DonationSite 리스트
 
