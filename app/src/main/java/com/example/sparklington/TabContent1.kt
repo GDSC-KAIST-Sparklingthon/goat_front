@@ -1,20 +1,20 @@
 package com.example.sparklington
 
-import android.service.autofill.UserData
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlin.random.Random
 import kotlinx.coroutines.delay
-import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,12 +24,13 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     var isRunning by rememberSaveable { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var showExitConfirmation by remember { mutableStateOf(false) }
-    var showCongrats by remember { mutableStateOf(false) } // 축하 메시지 상태 변수
+    var showCongrats by remember { mutableStateOf(false) }
     var selectedHours by remember { mutableStateOf(0) }
     var selectedMinutes by remember { mutableStateOf(0) }
     var betGrass by rememberSaveable { mutableStateOf(0) }
     var grassToGet by rememberSaveable { mutableStateOf(0) }
     var currentHay by rememberSaveable { mutableStateOf(0) }
+
     val gridRows = 8
     val gridColumns = 8
     val maxGrassCount = gridRows * gridColumns
@@ -60,7 +61,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         while (isRunning) {
             delay(1000L)
             if (remainingTicks > 0) {
-                remainingTicks-=100
+                remainingTicks -= 100
             } else {
                 isRunning = false
                 for (i in (1..grassIncreaseAmount)) {
@@ -85,18 +86,32 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
+        sheetDragHandle = {
+            // 드래그 핸들의 색상을 설정합니다.
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .background(Color(0xFF88977B)) // 드래그 핸들의 색상 설정
+            )
+        },
         sheetContent = {
-            FarmBottomSheet(
-                scaffoldState,
-                scope,
-                gridRows,
-                gridColumns,
-                positions,
-                onGrassCollected = { position ->
-                    positions.remove(position)
-                    UserDataHolder.garden_array = positions
-                    currentHay += 1
-                })
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFF88977B))
+            ) {
+                FarmBottomSheet(
+                    scaffoldState,
+                    scope,
+                    gridRows,
+                    gridColumns,
+                    positions,
+                    onGrassCollected = { position ->
+                        positions.remove(position)
+                        UserDataHolder.garden_array = positions
+                        currentHay += 1
+                    })
+            }
         },
         sheetPeekHeight = 56.dp,
         modifier = modifier.fillMaxSize()
@@ -185,15 +200,14 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 )
             }
 
-            Spacer(modifier = Modifier.height(100.dp)) // TimerButtons와 LottieAnimation 사이에 30dp 간격 추가
+            Spacer(modifier = Modifier.height(100.dp))
 
             if (composition != null) {
-                // GIF 이미지 (Lottie 애니메이션)
                 LottieAnimation(
                     composition = composition,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp) // 원하는 높이로 조절
+                        .height(200.dp)
                 )
             } else {
                 Text(
