@@ -8,6 +8,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlin.math.max
@@ -34,6 +37,10 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
     val positions = remember { mutableStateListOf<Pair<Int, Int>>() }
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
+
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Url("https://lottie.host/f01dc1d7-8155-4554-a269-7fa00788c0ba/gpoRgALuCo.json")
+    )
 
     LaunchedEffect(Unit) {
         positions.clear()
@@ -175,6 +182,20 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                         }
                     }
                 )
+            }
+
+            Spacer(modifier = Modifier.height(100.dp)) // TimerButtons와 LottieAnimation 사이에 30dp 간격 추가
+
+            if (composition != null) {
+                // GIF 이미지 (Lottie 애니메이션)
+                LottieAnimation(
+                    composition = composition,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp) // 원하는 높이로 조절
+                )
+            } else {
+                Text("Loading animation...", modifier = Modifier.align(Alignment.CenterHorizontally))
             }
         }
     }

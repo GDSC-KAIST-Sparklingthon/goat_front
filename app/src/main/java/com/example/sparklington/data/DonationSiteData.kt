@@ -32,7 +32,7 @@ fun getDonationSites(): List<DonationSite> {
             "https://www.redcross.org",
             R.drawable.redcross_logo,
             R.drawable.redcross,
-            "재난 구호, 생명 구조 활동",
+            "적십자사는 전 세계에서 인도주의적 활동을 통해 재난 구호, 생명 구조, 의료 지원, 인권 보호 등의 역할을 수행하는 국제 인도주의 단체입니다.",
             "보건"
         ),
         DonationSite(
@@ -41,7 +41,7 @@ fun getDonationSites(): List<DonationSite> {
             "https://www.unicef.org",
             R.drawable.unicef_logo,
             R.drawable.unicef,
-            "세계 아동 권리 보호 및 복지 활동",
+            "전 세계 어린이들의 생존, 보호, 발달을 위해 다양한 인도주의적 지원과 구호 활동을 펼치는 유엔 산하 국제 기구입니다.",
             "아동"
         ),
         DonationSite(
