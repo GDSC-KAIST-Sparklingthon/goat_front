@@ -1,6 +1,7 @@
 package com.example.sparklington
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -30,12 +32,18 @@ fun FarmBottomSheet(
 
     val scrollState = rememberScrollState()
 
+    // 스크롤 상태에 따라 알파 값을 조정하여 색상을 변경
+    val scrollMaxValue = 600 // 임의의 최대 스크롤 값
+    val alpha = (scrollState.value.toFloat() / scrollMaxValue).coerceIn(0f, 1f)
+    val backgroundColor = Color(0xFF1C3506).copy(alpha = alpha)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp, max = 600.dp)
             .padding(16.dp)
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .background(backgroundColor), // 스크롤 상태에 따른 배경색
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
