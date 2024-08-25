@@ -23,15 +23,16 @@ import androidx.compose.ui.res.painterResource
 fun TabContent4() {
     Column(
         modifier = Modifier
-            .fillMaxWidth() // 가로 전체 채우기
-            .padding(vertical = 12.dp),
+            .fillMaxWidth(), // 가로 전체 채우기
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // 상단 "마이페이지" 텍스트
         Text(
             text = "마이페이지",
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 24.dp)
         )
     }
 
@@ -40,7 +41,7 @@ fun TabContent4() {
             .fillMaxSize(), // 세로 전체 채우기
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         // 회색 원 프로필 이미지 대체
         Image(
@@ -66,10 +67,11 @@ fun TabContent4() {
 
         // 하단 연보라색 줄
         HorizontalDivider(
-            color = Color(0xFFECE4FF),
-            thickness = 4.dp,
+            color = Color(0xFF3F352C),
+            thickness = 5.dp,
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(10.dp))
         DonationCard(
             imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
             organization = "그린피스",
@@ -113,7 +115,7 @@ fun DonationHistory() {
 fun DonationCard(imageResId: Int, organization: String, date: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = Color(0xFFECE4FF),
+        color = Color(0xFFDDE8D4),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)

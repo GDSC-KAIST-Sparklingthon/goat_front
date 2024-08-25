@@ -52,7 +52,7 @@ fun TabContent3() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp, top=40.dp, bottom=20.dp),
+                .padding(20.dp, top=24.dp, bottom=20.dp),
 
             contentAlignment = Alignment.Center
         ) {
