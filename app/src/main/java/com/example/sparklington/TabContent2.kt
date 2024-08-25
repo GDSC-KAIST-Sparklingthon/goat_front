@@ -23,9 +23,9 @@ import com.example.sparklington.data.Quiz
 import com.example.sparklington.data.QuizData
 
 enum class GoatType(val id: Int, val color: Color) {
-    BASIC(1, Color.Gray),
-    CULTURE1(2, Color.Cyan),
-    CULTURE2(3, Color(0xFF90EE90));
+    BASIC(1, Color.Transparent),
+    CULTURE1(2, Color.Transparent),
+    CULTURE2(3, Color.Transparent);
 
     companion object {
         fun fromId(id: Int): GoatType {
