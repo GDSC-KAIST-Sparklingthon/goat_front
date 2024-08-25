@@ -190,7 +190,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
                     GoatType.CULTURE1 -> "바리 염소"
                     GoatType.CULTURE2 -> "리리 염소"
                 },
-                fontSize = 20.sp,
+                fontSize = 17.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black
             )
@@ -227,7 +227,10 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             modifier = Modifier.padding(8.dp),
             enabled = isButtonEnabled && localHayNum > 0
         ) {
-            Text(text = "먹이주기")
+            Text(
+                text = "먹이주기",
+                fontSize = 20.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
