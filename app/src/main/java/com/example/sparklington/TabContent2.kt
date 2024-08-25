@@ -121,7 +121,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -131,7 +131,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
