@@ -12,7 +12,7 @@ import com.example.sparklington.ServerCommunication.updateUser
 import com.kakao.sdk.talk.TalkApiClient
 
 object  UserDataHolder {
-    var accessToken: String? = "yTbIPSiqrtXfZ_JZdfoAGYIBAFYXscnOAAAAAQoqJU8AAAGRhZMWbFXuKbObXTiX"
+    var accessToken: String? = "81H6AKg_ZOFSKbzIPIvTjyBc0oRhg_48AAAAAQorDNIAAAGRh0XNNlXuKbObXTiX"
     var nickname:String? = null
     var profile_picture_URL:String? = null
     var goat_age: Int = 0 //DB

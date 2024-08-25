@@ -124,12 +124,6 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "염소",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
 
         Spacer(modifier = Modifier.height(28.dp))
 

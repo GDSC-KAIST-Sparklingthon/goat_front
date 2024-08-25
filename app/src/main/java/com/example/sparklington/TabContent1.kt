@@ -61,7 +61,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
         while (isRunning) {
             delay(1000L)
             if (remainingTicks > 0) {
-                remainingTicks -= 100
+                remainingTicks--
             } else {
                 isRunning = false
                 for (i in (1..grassIncreaseAmount)) {
