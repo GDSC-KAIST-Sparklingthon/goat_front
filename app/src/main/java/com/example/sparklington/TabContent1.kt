@@ -125,15 +125,16 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Timer(remainingTicks)
-            Text("현재 잔디: ${positions.count()} 개")
-            Text("현재 건초: $currentHay 개")
-            Text("획득 예정: ${betGrass + grassToGet}개")
+
             TimerButtons(
                 onStart = { isRunning = true },
                 onPause = { isRunning = false },
                 onSetTime = { showDialog = true }
             )
-
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("현재 잔디: ${positions.count()} 개")
+            Text("현재 건초: $currentHay 개")
+            Text("획득 예정: ${betGrass + grassToGet}개")
             if (showDialog) {
                 TimeSettingDialog(
                     selectedHours = selectedHours,
@@ -200,7 +201,7 @@ fun TabContent1(modifier: Modifier = Modifier, isRunningState: (Boolean) -> Unit
                 )
             }
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             if (composition != null) {
                 LottieAnimation(

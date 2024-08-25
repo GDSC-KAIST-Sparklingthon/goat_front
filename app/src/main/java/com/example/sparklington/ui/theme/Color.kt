@@ -17,3 +17,5 @@ val GreenBack = Color(0xFFDDE8D4)
 val BlueComp = Color(0xFF5079F0)
 val GreenComp = Color(0xFF152408)
 val GreenMDark = Color(0xFF1C3506)
+
+val BrownBack = Color(0xFF3F352C)
