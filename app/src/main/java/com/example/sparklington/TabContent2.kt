@@ -1,9 +1,7 @@
 package com.example.sparklington
 
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,82 +9,82 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.example.sparklington.data.Quiz
+import com.example.sparklington.data.QuizData
 
-enum class GoatType(val color: Color) {
-    BASIC(Color.Gray),
-    CULTURE1(Color.Cyan),
-    CULTURE2(Color(0xFF90EE90))
+enum class GoatType(val id: Int, val color: Color) {
+    BASIC(1, Color.Gray),
+    CULTURE1(2, Color.Cyan),
+    CULTURE2(3, Color(0xFF90EE90));
+
+    companion object {
+        fun fromId(id: Int): GoatType {
+            return values().find { it.id == id } ?: BASIC
+        }
+    }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun GoatTabContent(onDonateClicked: () -> Unit) {
-    var feedCount by remember { mutableStateOf(0) }
     var tempFeedCount by remember { mutableStateOf(0) }
     var showDialog by remember { mutableStateOf(false) }
-    var showBalloon by remember { mutableStateOf(false) }
-    var balloonType by remember { mutableStateOf("") }
     var showQuizOptions by remember { mutableStateOf(false) }
-    var showAnswerBalloon by remember { mutableStateOf(false) }
+    var showAnswerBox by remember { mutableStateOf(false) }
     var isButtonEnabled by remember { mutableStateOf(true) }
-    var goatType by remember { mutableStateOf(GoatType.BASIC) }
+    var quiz by remember { mutableStateOf<Quiz?>(null) }
+    var answerText by remember { mutableStateOf("") }
+
+    val goatType = GoatType.fromId(UserDataHolder.goat_age / 1000)
+    val feedCount = UserDataHolder.goat_age % 1000
 
     val maxFeedCount = 100
     val feedPercentage = (feedCount.toFloat() / maxFeedCount) * 100
+
+    var localHayNum by remember { mutableStateOf(UserDataHolder.hay_num) }
 
     LaunchedEffect(tempFeedCount) {
         if (tempFeedCount > 0) {
             delay(2000)
 
-            if ((0..4).random() == 0) {
-                balloonType = if ((0..1).random() == 0) "퀴즈" else "소식"
-                showBalloon = true
-                if (balloonType == "퀴즈") {
-                    showQuizOptions = true
-                }
+            // 70% 확률로 퀴즈가 뜨도록 설정
+            if ((0..9).random() < 7) {
+                quiz = QuizData.randomQuiz()
+                showQuizOptions = true
             }
-
             tempFeedCount = 0
         }
     }
 
-    LaunchedEffect(showBalloon) {
-        if (showBalloon) {
-            isButtonEnabled = false
-            delay(10000)
-            showBalloon = false
-            showQuizOptions = false
-            isButtonEnabled = true
-        }
-    }
-
-    LaunchedEffect(showAnswerBalloon) {
-        if (showAnswerBalloon) {
+    LaunchedEffect(showAnswerBox) {
+        if (showAnswerBox) {
             isButtonEnabled = false
             delay(3000)
-            showAnswerBalloon = false
+            showAnswerBox = false
             isButtonEnabled = true
         }
     }
 
     LaunchedEffect(Unit) {
-        feedCount = 0
-        goatType = GoatType.entries.random()
+        if (UserDataHolder.goat_age == 0) {
+            UserDataHolder.goat_age = GoatType.entries.random().id * 1000
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            UserDataHolder.hay_num = localHayNum
+        }
     }
 
     if (showDialog) {
@@ -102,6 +100,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             },
             confirmButton = {
                 TextButton(onClick = {
+                    UserDataHolder.goat_age = 0
                     showDialog = false
                     onDonateClicked()
                 }) {
@@ -171,43 +170,12 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(R.drawable.goat) // res/drawable에 있는 GIF 파일의 리소스 ID를 사용
-                    .decoderFactory(ImageDecoderDecoder.Factory()) // ImageDecoderDecoder를 사용하여 GIF 디코딩
+                    .data(R.drawable.goat)
+                    .decoderFactory(ImageDecoderDecoder.Factory())
                     .build(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize()
             )
-
-            if (showBalloon) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(8.dp))
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = balloonType,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            if (showAnswerBalloon) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Yellow, RoundedCornerShape(8.dp))
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = "정답입니다!",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -226,47 +194,124 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // "여물 연속 횟수" 텍스트 표시
+        Text(text = "X $tempFeedCount", fontSize = 24.sp)
+
+        // "보유 건초 수: n개" 텍스트 표시
+        Text(
+            text = "보유 건초 수: $localHayNum 개",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Black
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             onClick = {
-                if (feedCount < maxFeedCount && isButtonEnabled) {
-                    feedCount++
+                if (localHayNum > 0 && feedCount < maxFeedCount && isButtonEnabled) {
+                    UserDataHolder.goat_age = goatType.id * 1000 + (feedCount + 1)
+                    localHayNum--
                     tempFeedCount++
                 }
 
-                if (feedCount == maxFeedCount) {
+                if (feedCount + 1 == maxFeedCount) {
                     showDialog = true
                 }
             },
             modifier = Modifier.padding(8.dp),
-            enabled = isButtonEnabled
+            enabled = isButtonEnabled && localHayNum > 0
         ) {
             Text(text = "먹이주기")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "X $tempFeedCount", fontSize = 24.sp)
-
-        if (showQuizOptions) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+        // 퀴즈 상자 표시
+        if (showQuizOptions && quiz != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray, RoundedCornerShape(8.dp))
+                    .padding(16.dp)
             ) {
-                Button(onClick = {
-                    showBalloon = false
-                    showQuizOptions = false
-                    showAnswerBalloon = true
-                }) {
-                    Text(text = "O")
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = quiz!!.question,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                 }
-                Button(onClick = {
-                    showBalloon = false
-                    showQuizOptions = false
-                    showAnswerBalloon = true
-                }) {
-                    Text(text = "X")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 정답/오답 상자 표시
+        if (showAnswerBox) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Yellow, RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = answerText,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
+
+        // O, X 버튼 표시
+        if (showQuizOptions && quiz != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Button(
+                    onClick = {
+                        if (quiz!!.answer) {
+                            answerText = "정답입니다!"
+                        } else {
+                            answerText = "틀렸습니다!"
+                        }
+                        showQuizOptions = false
+                        showAnswerBox = true
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.Bottom)
+                ) {
+                    Text("O")
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = {
+                        if (!quiz!!.answer) {
+                            answerText = "정답입니다!"
+                        } else {
+                            answerText = "틀렸습니다!"
+                        }
+                        showQuizOptions = false
+                        showAnswerBox = true
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.Bottom)
+                ) {
+                    Text("X")
                 }
             }
         }
     }
 }
+

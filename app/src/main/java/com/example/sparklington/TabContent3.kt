@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sparklington.data.getDonationSites
+import com.example.sparklington.ui.theme.CustomFontFamily
 
 data class DonationSite(
     val krName: String,
@@ -49,35 +52,27 @@ fun TabContent3() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE1BEE7)) // 연보라색 배경
-                .padding(16.dp),
+                .padding(20.dp, top=40.dp, bottom=20.dp),
+
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "기부와 후원",
                 fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
+                fontFamily = CustomFontFamily,
+                fontWeight = FontWeight.Bold
             )
         }
+
 
         // 카테고리별 필터 버튼을 생성
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
         ) {
-            items(uniqueCategories) { category ->
-                Button(
-                    onClick = { selectedCategory = category },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedCategory == category) Color(0xFF6200EA) else Color.LightGray
-                    )
-                ) {
-                    Text(text = category)
-                }
-            }
-
             item {
                 Button(
                     onClick = { selectedCategory = null },
@@ -88,13 +83,23 @@ fun TabContent3() {
                     Text(text = "전체")
                 }
             }
+            items(uniqueCategories) { category ->
+                Button(
+                    onClick = { selectedCategory = category },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedCategory == category) Color(0xFF6200EA) else Color.LightGray
+                    ),
+                ) {
+                    Text(text = category)
+                }
+            }
         }
 
         // 선택된 카테고리에 따라 필터링된 기부 단체 목록을 표시
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = 25.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(donationSites.filter { it.category == selectedCategory || selectedCategory == null }) { site ->
@@ -166,7 +171,11 @@ fun ColumnCardAlert(site: DonationSite, onDismiss: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = site.krName) },
+        title = {  Box(
+            modifier = Modifier.padding(16.dp) // Add padding here
+        ) {
+            Text(text = site.krName)
+        } },
         text = {
             AlertCard(site)
         },
@@ -186,9 +195,6 @@ fun ColumnCardAlert(site: DonationSite, onDismiss: () -> Unit) {
                     Text("지금 후원하기")
                 }
 
-                TextButton(onClick = { onDismiss() }) {
-                    Text("취소")
-                }
             }
         }
     )

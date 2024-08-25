@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +24,6 @@ fun TabContent4() {
     Column(
         modifier = Modifier
             .fillMaxWidth() // 가로 전체 채우기
-            .background(Color(0xFFECE4FF)) // 연보라색 배경
             .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -69,8 +70,87 @@ fun TabContent4() {
             thickness = 4.dp,
             modifier = Modifier.fillMaxWidth()
         )
+        DonationCard(
+            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
+            organization = "그린피스",
+            date = "2024년 7월 17일"
+        )
+
+        // 두 번째 기부 정보 카드
+        DonationCard(
+            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
+            organization = "세이브더칠드런",
+            date = "2024년 8월 20일"
+        )
     }
 }
 
+@Composable
+fun DonationHistory() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // 첫 번째 기부 정보 카드
+        DonationCard(
+            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
+            organization = "그린피스",
+            date = "2024년 7월 17일"
+        )
+
+        // 두 번째 기부 정보 카드
+        DonationCard(
+            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
+            organization = "세이브더칠드런",
+            date = "2024년 8월 20일"
+        )
+    }
+}
+
+@Composable
+fun DonationCard(imageResId: Int, organization: String, date: String) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = Color(0xFFECE4FF),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 원형 이미지
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // 기부 단체와 날짜 텍스트
+            Column {
+                Text(
+                    text = "기부단체: $organization",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "날짜: $date",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 16.sp),
+                    color = Color.DarkGray
+                )
+            }
+        }
+    }
+}
 
 
