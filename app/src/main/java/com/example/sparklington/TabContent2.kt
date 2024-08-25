@@ -186,9 +186,9 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         ) {
             Text(
                 text = when (goatType) {
-                    GoatType.BASIC -> "기본 염소"
-                    GoatType.CULTURE1 -> "문화 염소 1"
-                    GoatType.CULTURE2 -> "문화 염소 2"
+                    GoatType.BASIC -> "바바 염소"
+                    GoatType.CULTURE1 -> "바리 염소"
+                    GoatType.CULTURE2 -> "리리 염소"
                 },
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
