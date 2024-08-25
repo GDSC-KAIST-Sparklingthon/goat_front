@@ -18,13 +18,12 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = GreenBack,
-    onPrimary = GreenComp,
+    primary = BrownBack,
+    onPrimary = SalmonBack,
     secondary = BlueBack,
     onSecondary = BlueComp,
 
     tertiary = Pink40,
-    background = SalmonBack,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -45,11 +44,6 @@ fun SparklingtonTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

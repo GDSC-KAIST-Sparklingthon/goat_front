@@ -84,8 +84,8 @@ fun FarmBottomSheet(
 fun GrassCell(hasGrass: Boolean, painter: Painter, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(30.dp)
-            .padding(2.dp)
+            .size(40.dp)
+            .padding(3.dp)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
