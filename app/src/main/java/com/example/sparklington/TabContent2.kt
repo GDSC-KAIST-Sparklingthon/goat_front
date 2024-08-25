@@ -23,9 +23,9 @@ import com.example.sparklington.data.Quiz
 import com.example.sparklington.data.QuizData
 
 enum class GoatType(val id: Int, val color: Color) {
-    BASIC(1, Color.Gray),
-    CULTURE1(2, Color.Cyan),
-    CULTURE2(3, Color(0xFF90EE90));
+    BASIC(1, Color.Transparent),
+    CULTURE1(2, Color.Transparent),
+    CULTURE2(3, Color.Transparent);
 
     companion object {
         fun fromId(id: Int): GoatType {
@@ -121,7 +121,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -131,16 +131,14 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = "${feedPercentage.toInt()}%", fontSize = 20.sp)
-
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Text(text = "${feedPercentage.toInt()}%", fontSize = 20.sp)
+            Spacer(modifier = Modifier.width(15.dp))
             repeat((feedPercentage / 20).toInt()) {
                 Box(
                     modifier = Modifier
@@ -159,12 +157,12 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // 염소 이미지 자리
         Box(
             modifier = Modifier
-                .size(150.dp)
+                .size(170.dp)
                 .background(goatType.color),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -181,21 +179,28 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // 염소 종류 텍스트 표시
-        Text(
-            text = when (goatType) {
-                GoatType.BASIC -> "기본 염소"
-                GoatType.CULTURE1 -> "문화 염소 1"
-                GoatType.CULTURE2 -> "문화 염소 2"
-            },
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black
-        )
+        Box(
+            modifier = Modifier
+                .background(Color(0xFFDABFB2), shape = RoundedCornerShape(8.dp)) // 배경과 모서리 설정
+                .padding(horizontal = 16.dp, vertical = 8.dp) // 패딩 추가
+        ) {
+            Text(
+                text = when (goatType) {
+                    GoatType.BASIC -> "바바 염소"
+                    GoatType.CULTURE1 -> "바리 염소"
+                    GoatType.CULTURE2 -> "리리 염소"
+                },
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black
+            )
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // "여물 연속 횟수" 텍스트 표시
         Text(text = "X $tempFeedCount", fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(20.dp))
 
         // "보유 건초 수: n개" 텍스트 표시
         Text(
@@ -205,7 +210,7 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
         Button(
             onClick = {
@@ -222,7 +227,10 @@ fun GoatTabContent(onDonateClicked: () -> Unit) {
             modifier = Modifier.padding(8.dp),
             enabled = isButtonEnabled && localHayNum > 0
         ) {
-            Text(text = "먹이주기")
+            Text(
+                text = "먹이주기",
+                fontSize = 20.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

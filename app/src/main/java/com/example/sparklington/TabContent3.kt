@@ -52,7 +52,7 @@ fun TabContent3() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp, top=40.dp, bottom=20.dp),
+                .padding(20.dp, top=24.dp, bottom=20.dp),
 
             contentAlignment = Alignment.Center
         ) {
@@ -77,7 +77,7 @@ fun TabContent3() {
                 Button(
                     onClick = { selectedCategory = null },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedCategory == null) Color(0xFF6200EA) else Color.LightGray
+                        containerColor = if (selectedCategory == null) Color(0xFF3F352C) else Color.LightGray
                     )
                 ) {
                     Text(text = "전체")
@@ -87,7 +87,7 @@ fun TabContent3() {
                 Button(
                     onClick = { selectedCategory = category },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedCategory == category) Color(0xFF6200EA) else Color.LightGray
+                        containerColor = if (selectedCategory == category) Color(0xFF3F352C) else Color.LightGray
                     ),
                 ) {
                     Text(text = category)
