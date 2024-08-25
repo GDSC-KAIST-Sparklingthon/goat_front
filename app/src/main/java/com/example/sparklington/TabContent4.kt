@@ -86,30 +86,6 @@ fun TabContent4() {
 }
 
 @Composable
-fun DonationHistory() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // 첫 번째 기부 정보 카드
-        DonationCard(
-            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
-            organization = "그린피스",
-            date = "2024년 7월 17일"
-        )
-
-        // 두 번째 기부 정보 카드
-        DonationCard(
-            imageResId = R.drawable.four, // 여기에 업로드한 이미지를 사용
-            organization = "세이브더칠드런",
-            date = "2024년 8월 20일"
-        )
-    }
-}
-
-@Composable
 fun DonationCard(imageResId: Int, organization: String, date: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),

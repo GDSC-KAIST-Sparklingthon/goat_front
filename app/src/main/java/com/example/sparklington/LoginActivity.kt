@@ -7,9 +7,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import com.example.sparklington.ServerCommunication.Constants
 import com.example.sparklington.ServerCommunication.Constants.TAG
 import com.example.sparklington.ServerCommunication.makeLoginRequest
+import com.example.sparklington.ui.theme.KakaoYellow
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
@@ -129,36 +134,31 @@ fun LoginScreen(onLoginClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE8E8CD))
+            .background(Color(0xFFFFFFFF))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Kakao Login Example",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(top = 30.dp)
-            )
-
-            Button(
-                onClick = onLoginClick,
+            Image(
+                painter = painterResource(id = R.drawable.balibali),
+                contentDescription = "logo",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 14.dp)
-            ) {
-                Text(
-                    text = "카카오 로그인",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xD9000000)
-                )
-            }
+                    .size(200.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.kakao_login), // Replace with your image resource
+                contentDescription = "Kakao Login",
+                modifier = Modifier
+                    .size(width = 250.dp, height = 70.dp) // Set the size of the image
+                    .clickable(onClick = {
+                        // Handle the click event here
+                        onLoginClick()
+                    })
+            )
         }
     }
 }
